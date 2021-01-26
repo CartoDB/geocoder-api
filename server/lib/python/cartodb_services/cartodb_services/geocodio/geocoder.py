@@ -29,7 +29,7 @@ class GeocodioGeocoder(Traceable):
         self._token = token
         self._logger = logger
 
-        self._geocoder = GeocodioClient(self._token)
+        self._geocoder = GeocodioClient(self._token, hipaa_enabled=True)
 
     def _validate_input(self, searchtext, city=None, state_province=None,
                         country=None):
@@ -121,6 +121,6 @@ class GeocodioGeocoder(Traceable):
         if response.get('results'):
             accuracy_type = response.get('results')[0].get('accuracy_type')
 
-        metadata = geocoder_metadata(RELEVANCE_BY_LOCATION_TYPE.get(accuracy_type), response.accuracy, accuracy_type)
+        metadata = geocoder_metadata(RELEVANCE_BY_LOCATION_TYPE.get(accuracy_type), response.accuracy, [accuracy_type])
 
         return [coords, metadata]
